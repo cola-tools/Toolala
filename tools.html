@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>工具集合 - Toolala工具站</title>
+     <link rel="shortcut icon" href="assets/vico/main.ico" type="image/x-icon">
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/animations.css">
+    <link rel="stylesheet" href="assets/css/responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- 在 head 标签内，紧接在现有样式之后添加 -->
+<style>
+    /* 聊天机器人样式 */
+    .chat-bot-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 350px;
+        max-height: 500px;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        display: flex;
+        flex-direction: column;
+        z-index: 1000;
+        overflow: hidden;
+        transform: translateY(100%);
+        opacity: 0;
+        transition: all 0.3s ease;
+    }
+    
+    .chat-bot-container.active {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    
+    .chat-bot-header {
+        background: #6c5ce7;
+        color: white;
+        padding: 12px 15px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: pointer;
+    }
+    
+    .chat-bot-header h3 {
+        margin: 0;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .chat-bot-toggle {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 1rem;
+        cursor: pointer;
+    }
+    
+    .chat-bot-body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        height: 400px;
+    }
+    
+    .chat-messages {
+        flex: 1;
+        padding: 1rem;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+    
+    .message {
+        max-width: 80%;
+        padding: 0.6rem 1rem;
+        border-radius: 12px;
+        position: relative;
+        animation: fadeIn 0.3s ease;
+        font-size: 0.9rem;
+        line-height: 1.4;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .bot-message {
+        align-self: flex-start;
+        background-color: rgba(108, 92, 231, 0.1);
+        border-bottom-left-radius: 4px;
+        color: #2d3436;
+    }
+    
+    .user-message {
+        align-self: flex-end;
+        background-color: #00b894;
+        color: white;
+        border-bottom-right-radius: 4px;
+    }
+    
+    .message-time {
+        font-size: 0.7rem;
+        opacity: 0.7;
+        margin-top: 0.3rem;
+        text-align: right;
+    }
+    
+    .chat-input-area {
+        padding: 0.8rem;
+        border-top: 1px solid #dfe6e9;
+        display: flex;
+        gap: 0.5rem;
+        background: white;
+    }
+    
+    .chat-input-area input {
+        flex: 1;
+        padding: 0.6rem 0.8rem;
+        border: 1px solid #dfe6e9;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+    }
+    
+    .chat-input-area input:focus {
+        border-color: #6c5ce7;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2);
+    }
+    
+    .chat-send-btn {
+        background-color: #6c5ce7;
+        color: white;
+        border: none;
+        width: 40px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .chat-send-btn:hover {
+        background-color: #5649c0;
+    }
+    
+    .chat-send-btn:disabled {
+        background-color: #b2bec3;
+        cursor: not-allowed;
+    }
+    
+    .typing-indicator {
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+        padding: 0.6rem 1rem;
+        background-color: rgba(108, 92, 231, 0.1);
+        border-radius: 12px;
+        align-self: flex-start;
+        margin-bottom: 0.5rem;
+    }
+    
+    .typing-dot {
+        width: 6px;
+        height: 6px;
+        background-color: #6c5ce7;
+        border-radius: 50%;
+        animation: typingAnimation 1.4s infinite ease-in-out;
+    }
+    
+    .typing-dot:nth-child(1) {
+        animation-delay: 0s;
+    }
+    
+    .typing-dot:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+    
+    .typing-dot:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+    
+    @keyframes typingAnimation {
+        0%, 60%, 100% { transform: translateY(0); }
+        30% { transform: translateY(-3px); }
+    }
+    
+    .quick-questions {
+        display: flex;
+        overflow-x: auto;
+        gap: 0.5rem;
+        padding: 0.8rem;
+        background: white;
+        scrollbar-width: none;
+    }
+    
+    .quick-questions::-webkit-scrollbar {
+        display: none;
+    }
+    
+    .quick-question {
+        background-color: rgba(108, 92, 231, 0.1);
+        color: #6c5ce7;
+        border: none;
+        padding: 0.4rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+    
+    .quick-question:hover {
+        background-color: rgba(108, 92, 231, 0.2);
+    }
+    
+    .chat-bot-launcher {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 60px;
+        height: 60px;
+        background-color: #6c5ce7;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        z-index: 999;
+        transition: all 0.3s ease;
+    }
+    
+    .chat-bot-launcher:hover {
+        background-color: #5649c0;
+        transform: scale(1.1);
+    }
+    
+    .chat-bot-launcher i {
+        font-size: 1.5rem;
+    }
+    
+    @media (max-width: 600px) {
+        .chat-bot-container {
+            width: calc(100% - 40px);
+            max-height: 70vh;
+            bottom: 10px;
+            right: 10px;
+        }
+        
+        .chat-bot-launcher {
+            width: 50px;
+            height: 50px;
+            bottom: 10px;
+            right: 10px;
+        }
+    }
+</style>
+
+</head>
+<body>
+    <div id="particles-js"></div>
+    
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-brand">
+                <img src="assets/vico/main.ico" alt="小可乐工具箱" class="logo">
+                <span class="brand-name">Toolala工具站</span>
+                <span class="tagline">工具 · 效率 · 开源</span>
+            </div>
+            <div class="navbar-menu">
+                <ul class="nav-links">
+                    <li class="nav-item"><a href="index.html"><i class="fas fa-home"></i> 首页</a></li>
+                    <li class="nav-item active"><a href="tools.html"><i class="fas fa-tools"></i> 工具</a></li>
+                    <li class="nav-item"><a href="ZX-tools.html"><i class="fas fa-laptop-code"></i> 在线工具</a></li>
+                    <li class="nav-item"><a href="BK.html"><i class="fas fa-file-arrow-down"></i>站点下载</a></li>
+                    <li class="nav-item"><a href="about.html"><i class="fas fa-info-circle"></i> 关于我们</a></li>
+                </ul>
+            </div>
+            <div class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+    <main class="main-content">
+        <!-- 工具搜索 -->
+        <section class="tool-search">
+            <div class="container">
+                <div class="search-container">
+                    <input type="text" id="tool-search" placeholder="搜索工具名称或关键词..." class="search-input">
+                </div>
+            </div>
+        </section>
+
+        <!-- 工具分类 -->
+        <section class="tool-categories">
+            <div class="container">
+                <div class="category-tabs">
+                    <button class="category-tab active" data-category="all">全部工具</button>
+                    <button class="category-tab" data-category="pc">电脑工具</button>
+                    <button class="category-tab" data-category="mobile">手机工具</button>
+                    <button class="category-tab" data-category="web">网页工具</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 热门工具 -->
+        <section class="hot-tools">
+            <div class="container">
+                <h2 class="section-title"><i class="fas fa-fire"></i> 热门工具</h2>
+                <div class="tools-grid">
+                    <div class="tool-card" data-categories="pc,web">
+                        <a target="_blank" href=" 文件分享链接（网盘链接） ">
+                            <div class="tool-icon">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <h3 class="tool-title">PDF工具（完全免费）</h3>
+                        <p class="tool-desc">PDFgear是多功能程序，里面包含了PDF编辑，合成，各种文件格式转化等功能，而且全部免费1</p>
+                        <div class="tool-tag">Windows10/11</div>
+                        <div class="tool-badge hot">热</div>
+                    </div></a>
+                    <div class="tool-card" data-categories="pc,mobile,web">
+                        <a target="_blank" href=" 文件分享链接（网盘链接） ">
+                            <div class="tool-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <h3 class="tool-title">格式转化</h3>
+                        <p class="tool-desc">支持格式非常多；比如：文档，电子书视频，图片，音频等格式；支持批量转换文件，离线转换文件；完全免费“无需登录”</p>
+                        <div class="tool-tag">网页端</div>
+                        <div class="tool-badge hot">热</div>
+                    </div></a>
+                    <div class="tool-card"  data-categories="pc,mobile,web">
+                        <a target="_blank" href=" 文件分享链接（网盘链接） ">
+                        <div class="tool-icon">
+                            <i class="fas fa-image"></i> 
+                        </div>
+                        <h3 class="tool-title">图片编辑</h3>
+                        <p class="tool-desc">支持智能抠图，无损放大，黑白照上色，在线消除，天空替换，模糊背景等</p>
+                        <div class="tool-tag">网页端</div>
+                        <div class="tool-badge hot">热</div>
+                    </div></a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 全部工具 -->
+        <section class="all-tools">
+            <div class="container">
+                <h2 class="section-title"><i class="fas fa-th-large"></i> 全部工具</h2>
+                <div class="tools-grid">
+                    <div class="tool-card" data-categories="pc,mobile">
+                        <a target="_blank" href=" 文件分享链接（网盘链接） ">
+                        <div class="tool-icon">
+                            <i class="fa-brands fa-qq"></i>
+                        </div>
+                        <h3 class="tool-title">QQ</h3>
+                        <p class="tool-desc">现代互联网社会必备的通讯软件，腾讯产品，值得您一用！</p>
+                        <div class="tool-tag">多版整合||官方产品</div></a>
+                    </div>
+                    <div class="tool-card" data-categories="pc,mobile">
+                        <a target="_blank" href=" 文件分享链接（网盘链接） ">
+                        <div class="tool-icon">
+                            <i class="fas fa-circle-dot rec-icon"></i>
+                        </div>
+                        <h3 class="tool-title">录屏软件整合</h3>
+                        <p class="tool-desc">多款Mac端录频程序，因条件有限原因无法亲测，有条件的用户，可以将使用情况通过邮箱反馈给站长，让网站内容更全面</p>
+                        <div class="tool-tag">Mac端</div></a>
+                    </div>
+                    <div class="tool-card" data-categories="pc">
+                        <a target="_blank" href=" 文件分享链接（网盘链接） ">
+                        <div class="tool-icon">
+                            <i class="fas fa-hard-drive disk-icon"></i>
+                        </div>
+                        <h3 class="tool-title">磁盘管理</h3>
+                        <p class="tool-desc">是一款可以能够可视化管理电脑磁盘的程序，让你清楚知道电脑文件占用大小以及有助于正确清理磁盘的作用</p>
+                        <div class="tool-tag">Windows10/11</div></a>
+                    </div>
+                    <div class="tool-card" data-categories="">
+                        <a target="_blank" href=" 文件分享链接（网盘链接） ">
+                        <div class="tool-icon">
+                           <i class="fas fa-video meeting-icon"></i>
+                        </div>
+                         <h3 class="tool-title">腾讯会议</h3>
+                        <p class="tool-desc">让工作会议更便捷；程序含有多种功能，让你工作无忧，实现高效率开会，不管你在哪，只要你拥有了它，不管你在哪，都能准时开会；程序还用于各种面试考试等</p>
+                        <div class="tool-tag">Mac端</div></a>
+                    </div>
+                    <div class="tool-card" data-categories="pc">
+                        <a target="_blank" href=" 文件分享链接（网盘链接） ">
+                        <div class="tool-icon">
+                            <i class="fas fa-arrows-rotate update-icon"></i>
+                        </div>
+                        <h3 class="tool-title">KeyGen</h3>
+                        <p class="tool-desc">让你对激活Windows系统毫无忧愁的程序，只需你运行程序，程序会自动帮你激活系统，支持多种版本激活</p>
+                        <div class="tool-tag">Windows10/11</div></a>
+                    </div>
+                    <div class="tool-card" data-categories="pc">
+                        <a target="_blank" href=" 文件分享链接（网盘链接） ">
+                        <div class="tool-icon">
+                            <i class="fas fa-wrench maintenance-icon"></i>
+                        </div>
+                         <h3 class="tool-title">PE系统</h3>
+                        <p class="tool-desc">拥有它的那一刻起，你的电脑你自己也能救；这款程序支持电脑系统重装，管理，维护等；整个程序页面整洁，无任何广告，完全免费，是电脑第一强管家</p>
+                        <div class="tool-tag">Windows10/11（有些不兼容）</div></a>
+                    </div>
+                    <div class="tool-card" data-categories="pc">
+                        <a target="_blank" href=" 文件分享链接（网盘链接） ">
+                        <div class="tool-icon">
+                            <i class="fas fa-music soda-music-icon"></i>
+                        </div>
+                        <h3 class="tool-title">汽水音乐</h3>
+                        <p class="tool-desc">高质量音乐，广告可以领取VIP，有多种听歌模式，是音乐的天王</p>
+                        <div class="tool-tag">win10/11||多版本</div></a>
+                    </div>
+                    <div class="tool-card" data-categories="pc,mobile">
+                        <a target="_blank" href=" 文件分享链接（网盘链接） ">
+                        <div class="tool-icon">
+                            <i class="fas fa-music music-icon"></i>
+                        </div>
+                        <h3 class="tool-title">QQ音乐</h3>
+                        <p class="tool-desc">音乐平台，有海量精品音乐供你来娱乐，含AI唱歌，写歌词等等</p>
+                        <div class="tool-tag">win10/11||多版本软件</div></a>
+                    </div>
+                    <div class="tool-card" data-categories="web，pc">
+                        <a target="_blank" href=" 文件分享链接（网盘链接） ">
+                        <div class="tool-icon">
+                           <i class="fas fa-tower-observation alert-icon"></i>
+                        </div>
+                        <h3 class="tool-title">红色警报2</h3>
+                        <p class="tool-desc">红色警报2网页版与正版相似，可进行娱乐游玩；提醒：不要沉迷于网络游戏！</p>
+                        <div class="tool-tag">网页版|电脑运行</div></a>
+                    </div>
+                    <div class="tool-card" data-categories="pc,mobile">
+                        <a target="_blank" href="https://julebu.co/ref/WERZ1AE9">
+                        <div class="tool-icon">
+                           <i class="fas fa-language english-icon"></i>
+                        </div>
+                        <h3 class="tool-title">句乐部（英语学习）</h3>
+                        <p class="tool-desc">该站点可以零基础学习英语，里面包含有3500单词，40篇短文，807高频句子等课程供你学习，简直就是第三人称一对一辅导，网站涵盖有免费和付费课程，可以按照需求进行使用</p>
+                        <div class="tool-tag">网页端||多端均可运行</div></a>
+                    </div>
+                    <div class="tool-card" data-categories="pc,mobile">
+                        <a target="_blank" href="https://transmart.qq.com/zh-CN/intro">
+                        <div class="tool-icon">
+                            <i class="fas fa-language translation-icon"></i>
+                        </div>
+                        <h3 class="tool-title">腾讯交互翻译</h3>
+                        <p class="tool-desc">站点页面整洁，无广告，有实时翻译和文件翻译两大功能；仅需登录站点，即可免费使用翻译功能，文件翻译保留文件格式，只翻译文件，非常方便！</p>
+                        <div class="tool-tag">网页端||多端均可运行</div></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+                    <!-- 视频教程模块 -->
+<section class="video-tutorial">
+    <div class="container">
+        <div class="tutorial-card">
+            <div class="tutorial-header">
+                <h2><i class="fas fa-film"></i> 工具使用/下载教程（<a target="_blank" href="视频链接" style="color:#4a6bff">工具使用视频教程</a>）</h2>
+                <div class="tutorial-steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3>选择工具</h3>
+                            <p>从分类或搜索中找到您需要的工具</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3>查看详情</h3>
+                            <p>光标放置在工具卡片，查看工具详情</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3>使用/下载</h3>
+                            <p>在线使用或下载到本地</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a target="_blank" href="about.html" class="footer-link">关于我们</a>
+                    <a target="_blank" href="license.html" class="footer-link">开源协议</a>
+                    <a target="_blank" href="contribute.html" class="footer-link">贡献指南</a>
+                    <a target="_blank" href="cla.html" class="footer-link">贡献者协议</a>
+                </div>
+                <div class="footer-social">
+                    <a target="_blank" href="LXFS.html" class="social-icon"><i class="fab fa-github"></i></a>
+                    <a target="_blank" href="LXFS.html" class="social-icon"><i class="fab fa-weixin"></i></a>
+                    <a target="_blank" href="LXFS.html" class="social-icon"><i class="fab fa-qq"></i></a>
+                </div>
+<div class="footer-copyright">
+    <p>© 2025 Toolala工具站 - 开源免费工具集合 | 由可乐科技提供支持</p>
+        <div class="friend-links-container">
+           <button class="friend-links-btn">友情链接 ▼</button>
+              <div class="friend-links-dropdown" id="friendLinksDropdown">
+              <a href="https://www.codeus.cn/" target="_blank">ZiYuanHub</a>
+        </div>
+    </div>
+</div>
+    </footer>
+
+                <!-- 聊天机器人启动按钮 -->
+<div class="chat-bot-launcher" id="chatBotLauncher">
+    <i class="fas fa-robot"></i>
+</div>
+
+<!-- 聊天机器人容器 -->
+<div class="chat-bot-container" id="chatBotContainer">
+    <div class="chat-bot-header" id="chatBotHeader">
+        <h3><i class="fas fa-robot"></i> Toolala智能助手</h3>
+        <button class="chat-bot-toggle" id="chatBotToggle">
+            <i class="fas fa-minus"></i>
+        </button>
+    </div>
+    <div class="chat-bot-body">
+        <div class="chat-messages" id="chat-messages">
+            <div class="welcome-message"></div>
+        </div>
+        <div class="quick-questions" id="quick-questions">
+            <!-- 快捷问题按钮将通过JavaScript动态生成 -->
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="user-input" placeholder="输入消息..." autocomplete="off">
+            <button class="chat-send-btn" id="send-btn" disabled>
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+
+    <script src="assets/js/particles.js"></script>
+    <script src="assets/js/tools.js"></script>
+    <script src="assets/js/main.js"></script>
+
+                <script>
+    // 快捷问题列表
+    const quickQuestions = [
+        "最近为什么一直没更新？",
+        "Toolala工具站是做什么的？",
+        "有什么功能？",
+        "怎么联系客服？",
+        "网站地址是什么？",
+        "如何使用工具站？",
+        "常见问题解答",
+    ];
+    
+    // 答案映射
+    const answerMap = {
+        "最近为什么一直没更新？": "最近因为技术部门较忙原因，无法能够正常更新页面工具和其他内容，我们计划在7月份开始正常更新，请大家耐心等待！",
+        "Toolala工具站是做什么的？": "Toolala工具站是一个开源免费的实用工具导航系统，同时也有很多程序/软件包含在网站中，您可以按照自己的需求进行获取。",
+        "有什么功能？": "可以导航到在线工具网站、可以下载各种手机/电脑实用工具、可以使用在线工具等等",
+        "怎么联系客服？": "您可以通过邮件3430667576@qq.com或2171156701@qq.com联系我们。",
+        "网站地址是什么？": "我们的网站地址是https://colatools.cn。",
+        "如何使用工具站？": "只需访问网站，选择您需要的工具，跳转或下载使用即可；在站点“工具”导航栏最下方有工具具体使用/下载步骤可以参考！",
+        "常见问题解答": "1.Toolala工具站收费吗？2.Toolala工具站会一直线上运营吗？3.Toolala工具站贡献者协议4.Toolala工具站贡献指南5.Toolala工具站技术支持。在消息框输入对应问题的数字，你就能精确地找到相关问题的答案。",
+        "你是谁": "我是Toolala工具站智能机器人，很高兴为您服务。有任何问题可以先和我沟通，若得不到你想要的答案，那就联系技术吧！",
+        "1": "Toolala工具站因近期运营，对广大用户免费使用，而且功能都很基础，所以对用户全面开源免费使用。",
+        "2": "Toolala工具站对此只能说“不晓得”,因为后期在线运营还是主要看用户支持和精神以及其他方面的支持，如果后期访问数，点击量变低，域名续费和站点服务器运维资金不足等的情况下，小可乐工具站会被迫停止在线运营；所以希望广大用户持续支持我们，让我们将网站持续运营下去，谢谢您们！",
+        "3": "您可以在站点页面下滑，找到页脚信息中的“贡献者协议”，点击访问即可查看详细贡献协议。",
+        "4": "您可以在站点页面下滑，找到页脚信息中的“贡献指南”，点击访问即可查看详细贡献指南，帮你快速了解如何贡献代码。",
+        "5": "Toolala工具站由多个站点共同支持；例如“DeepSeek”、“xxAPI”等，其他技术支持暂未了解到站点信息，如有看到您的产品，请联系站长！"
+    };
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        const chatMessages = document.getElementById('chat-messages');
+        const userInput = document.getElementById('user-input');
+        const sendBtn = document.getElementById('send-btn');
+        const quickQuestionsContainer = document.getElementById('quick-questions');
+        const chatBotLauncher = document.getElementById('chatBotLauncher');
+        const chatBotContainer = document.getElementById('chatBotContainer');
+        const chatBotHeader = document.getElementById('chatBotHeader');
+        const chatBotToggle = document.getElementById('chatBotToggle');
+        
+        // 初始化聊天机器人状态
+        let chatBotOpen = false;
+        
+        // 添加快捷问题按钮
+        quickQuestions.forEach(question => {
+            const btn = document.createElement('button');
+            btn.className = 'quick-question';
+            btn.textContent = question;
+            btn.addEventListener('click', () => {
+                userInput.value = question;
+                sendMessage();
+            });
+            quickQuestionsContainer.appendChild(btn);
+        });
+        
+        // 启用/禁用发送按钮
+        userInput.addEventListener('input', function() {
+            sendBtn.disabled = this.value.trim() === '';
+        });
+        
+        // 聊天机器人启动按钮点击事件
+        chatBotLauncher.addEventListener('click', function() {
+            chatBotOpen = !chatBotOpen;
+            if (chatBotOpen) {
+                chatBotContainer.classList.add('active');
+                chatBotLauncher.style.opacity = '0';
+                setTimeout(() => {
+                    chatBotLauncher.style.display = 'none';
+                }, 300);
+            } else {
+                chatBotContainer.classList.remove('active');
+                chatBotLauncher.style.display = 'flex';
+                setTimeout(() => {
+                    chatBotLauncher.style.opacity = '1';
+                }, 10);
+            }
+        });
+        
+        // 聊天机器人头部点击事件
+        chatBotHeader.addEventListener('click', function() {
+            chatBotOpen = false;
+            chatBotContainer.classList.remove('active');
+            chatBotLauncher.style.display = 'flex';
+            setTimeout(() => {
+                chatBotLauncher.style.opacity = '1';
+            }, 10);
+        });
+        
+        // 点击发送按钮
+        sendBtn.addEventListener('click', sendMessage);
+        
+        // 按回车键发送
+        userInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+        
+        async function sendMessage() {
+            const message = userInput.value.trim();
+            if (!message) return;
+            
+            // 添加用户消息到聊天界面
+            addMessage(message, 'user');
+            userInput.value = '';
+            sendBtn.disabled = true;
+            
+            // 显示机器人正在输入
+            showTypingIndicator();
+            
+            try {
+                // 这里可以替换为实际的模型调用
+                // 现在使用简单的答案映射
+                let botResponse = answerMap[message] || "我还在学习中，暂时无法回答这个问题。您可以尝试其他问题。";
+                
+                // 模拟网络延迟
+                await new Promise(resolve => setTimeout(resolve, 800));
+                
+                removeTypingIndicator();
+                typewriterEffect(botResponse, 'bot');
+            } catch (error) {
+                console.error('Error:', error);
+                removeTypingIndicator();
+                typewriterEffect("抱歉，我暂时无法处理您的请求。", 'bot');
+            }
+        }
+        
+        // 逐字打印效果
+        function typewriterEffect(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}-message`;
+            
+            const messageText = document.createElement('div');
+            messageDiv.appendChild(messageText);
+            
+            const timeSpan = document.createElement('div');
+            timeSpan.className = 'message-time';
+            timeSpan.textContent = getCurrentTime();
+            messageDiv.appendChild(timeSpan);
+            
+            chatMessages.appendChild(messageDiv);
+            
+            let i = 0;
+            const speed = 50; // 打字速度(毫秒)
+            
+            function typeWriter() {
+                if (i < text.length) {
+                    messageText.textContent += text.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, speed);
+                    scrollToBottom();
+                }
+            }
+            
+            typeWriter();
+        }
+        
+        // 添加普通消息到聊天界面
+        function addMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}-message`;
+            
+            const messageText = document.createElement('div');
+            messageText.textContent = text;
+            messageDiv.appendChild(messageText);
+            
+            const timeSpan = document.createElement('div');
+            timeSpan.className = 'message-time';
+            timeSpan.textContent = getCurrentTime();
+            messageDiv.appendChild(timeSpan);
+            
+            chatMessages.appendChild(messageDiv);
+            scrollToBottom();
+        }
+        
+        // 显示机器人正在输入
+        function showTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'typing-indicator';
+            typingDiv.id = 'typing-indicator';
+            
+            for (let i = 0; i < 3; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'typing-dot';
+                typingDiv.appendChild(dot);
+            }
+            
+            chatMessages.appendChild(typingDiv);
+            scrollToBottom();
+        }
+        
+        // 移除输入指示器
+        function removeTypingIndicator() {
+            const typingIndicator = document.getElementById('typing-indicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+        
+        // 获取当前时间
+        function getCurrentTime() {
+            const now = new Date();
+            return `${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
+        }
+        
+        // 滚动到底部
+        function scrollToBottom() {
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // 初始欢迎消息(使用打字机效果)
+        setTimeout(() => {
+            const welcomeText = "您好！我是Toolala工具站的智能助手，可以回答关于工具站的各种问题。有什么我可以帮助您的吗？（因自定义后台知识库，只支持对应问题的搜索，不支持个性聊天；可以点击下方“常见问题解决”快捷按钮，找到问题源和解决方法）";
+            typewriterEffect(welcomeText, 'bot');
+        }, 1000);
+    });
+</script>
+
+</body>
+</html>
