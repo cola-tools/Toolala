@@ -1,8 +1,8 @@
 # 小可乐工具箱
 
-![小可乐工具箱Logo](assets/vico/main.ico)
+![Toolala工具站Logo](assets/vico/main.ico)
 
-一个开源免费的实用工具导航集，提供电脑工具、手机工具和网页工具等多种类型的实用工具。
+一个开源免费的工具导航集，提供电脑工具、手机工具和网页工具等多种类型的实用工具。
 
 Toolala工具站：<a href="https://colatools.cn/" title="Toolala官方">点击访问</a>
 
@@ -45,13 +45,9 @@ coke-tools/
 │ │ └── particles.js # 背景特效
 │ └── images/
 │ ├── logo.svg # 矢量LOGO
-│ ├── avatar.png # 用户头像
 │ └── textures/ # 3D纹理
 ├── index.html # 首页
 ├── tools.html # 工具页
-├── forum.html # 论坛页
-├── login.html # 登录页
-├── register.html # 注册页
 └── README.md # 项目说明文档
 
 
@@ -77,35 +73,12 @@ cd coke-tools
 工具页
 工具搜索功能
 
-工具分类筛选（全部、电脑、手机、其他）
+工具分类筛选（全部、电脑、手机、网页）
 
 热门工具标记
 
-论坛页
-建设中页面
-
 开发进度展示
 
-用户系统
-登录/注册界面
-
-密码强度检测
-
-注册成功提示
-
-
-
-自定义配置
-修改主题颜色：
-在assets/css/main.css中修改:root下的CSS变量：
-
-css
-:root {
-    --primary-color: #4a6bff;
-    --secondary-color: #6c5ce7;
-    --accent-color: #00cec9;
-    /* 其他颜色变量 */
-}
 添加新工具：
 在tools.html中按照现有格式添加新的工具卡片：
 
@@ -147,7 +120,7 @@ Fork项目
 
 ## 项目总结
 
-这个"小可乐工具箱"网站具有以下特点：
+这个"Toolala工具站"网站具有以下特点：
 
 1. **现代化设计**：
    - 3D粒子背景效果
@@ -158,8 +131,6 @@ Fork项目
 2. **完整功能**：
    - 首页展示公告和最新工具
    - 工具页带搜索和分类功能
-   - 登录/注册系统
-   - 论坛页（建设中）
 
 3. **技术亮点**：
    - 纯前端实现，无需后端
