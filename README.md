@@ -17,6 +17,9 @@ https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzE5MTg2ODgwOA==
 Toolala小助手
 ```
 
+![Toolala公众号Logo](assets/vico/main.ico)
+
+
 ## 项目特点
 
 - 🚀 完全开源免费，无任何会员制、付费制
