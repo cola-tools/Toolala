@@ -6,6 +6,51 @@
 
 Toolala工具站：<a href="https://colatools.cn/" title="Toolala官方">点击访问</a>
 
+
+微信公众号（将文本复制到微信打开链接）：
+<!-- 可点击复制的文本元素 -->
+<span id="copyText" style="cursor: pointer; color: #0066cc; text-decoration: underline;">
+复制微信公众号链接到剪切板
+</span>
+
+<script>
+// 获取要添加点击事件的元素
+const copyElement = document.getElementById('copyText');
+
+// 添加点击事件监听
+copyElement.addEventListener('click', function() {
+  // 要复制的文本内容
+  const textToCopy = "https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzE5MTg2ODgwOA==";
+  
+  // 创建临时的textarea元素
+  const textarea = document.createElement('textarea');
+  textarea.value = textToCopy;
+  textarea.style.position = 'fixed';  // 防止页面滚动
+  document.body.appendChild(textarea);
+  
+  // 选中文本
+  textarea.select();
+  
+  try {
+    // 执行复制命令
+    const successful = document.execCommand('copy');
+    if(successful) {
+      // 反馈给用户
+      copyElement.textContent = '已复制!';
+      setTimeout(() => {
+        copyElement.textContent = '复制微信公众号链接到剪切板';
+      }, 2000);
+    }
+  } catch (err) {
+    console.error('复制失败:', err);
+  }
+  
+  // 移除临时元素
+  document.body.removeChild(textarea);
+});
+</script>
+
+
 ## 项目特点
 
 - 🚀 完全开源免费，无任何会员制、付费制
