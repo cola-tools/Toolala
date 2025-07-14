@@ -14,13 +14,7 @@ https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzE5MTg2ODgwOA==
 
 然后需要在该站点的全局JS中添加：
 ```javascript
-document.querySelectorAll('.copy-btn').forEach(btn => {
-  btn.addEventListener('click', (e) => {
-    e.preventDefault();
-    const text = btn.getAttribute('data-clipboard-text');
-    navigator.clipboard.writeText(text);
-  });
-});
+https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzE5MTg2ODgwOA==
 
 
 ## 项目特点
