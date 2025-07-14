@@ -4,7 +4,7 @@
 
 一个开源免费的工具导航集，提供电脑工具、手机工具和网页工具等多种类型的实用工具。
 
-Toolala工具站：<a href="https://colatools.cn/" title="Toolala官方">点击访问</a>
+Toolala工具站：<a target="_blank" href="https://colatools.cn/" title="Toolala官方">点击访问</a>
 
 
 ## 微信公众号（将文本复制到微信打开链接）：
