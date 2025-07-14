@@ -8,11 +8,6 @@ Toolala工具站：<a href="https://colatools.cn/" title="Toolala官方">点击�
 
 
 微信公众号（将文本复制到微信打开链接）：
-https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzE5MTg2ODgwOA==
-
-[点击复制](#){:data-clipboard-text="Hello World!" .copy-btn}
-
-然后需要在该站点的全局JS中添加：
 ```javascript
 https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzE5MTg2ODgwOA==
 
