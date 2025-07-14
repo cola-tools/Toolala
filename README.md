@@ -17,7 +17,7 @@ https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzE5MTg2ODgwOA==
 Toolala小助手
 ```
 
-![Toolala公众号Logo](assets/vico/main.ico)
+![Toolala公众号Logo](assets/vico/ToolalaGZH.png)
 
 
 ## 项目特点
