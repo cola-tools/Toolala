@@ -19,6 +19,7 @@ Toolala小助手
 
 ![Toolala公众号Logo](assets/vico/ToolalaGZH.png)
 
+关注公众号后，会自动发送新人福利，若没收到，可在公众号回复“新人福利”即可获取！
 
 ## 项目特点
 
