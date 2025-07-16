@@ -51,53 +51,6 @@ coke-tools/
 └── README.md # 项目说明文档
 
 
-## 安装与运行 ##
-
-1. 克隆仓库：
-   ```bash
-   git clone https://github.com/yourusername/coke-tools.git
-
-2.进入项目目录：
-bash
-cd coke-tools
-3.启动本地服务器（推荐使用Live Server等插件）
-
-功能说明
-首页
-网站公告和简介
-
-最新工具展示
-
-更新日志
-
-工具页
-工具搜索功能
-
-工具分类筛选（全部、电脑、手机、网页）
-
-热门工具标记
-
-开发进度展示
-
-添加新工具：
-在tools.html中按照现有格式添加新的工具卡片：
-
-html
-<div class="tool-card" data-categories="pc|mobile|web">
-    <div class="tool-icon">
-        <i class="fas fa-icon-name"></i>
-    </div>
-    <h3 class="tool-title">工具名称</h3>
-    <p class="tool-desc">工具描述</p>
-    <div class="tool-tag">分类标签</div>
-    <!-- 可选标记 -->
-    <div class="tool-badge hot">热门</div>
-</div>
-修改粒子效果：
-在assets/js/particles.js中调整粒子参数。
-
-
-
 贡献指南
 欢迎贡献代码！请遵循以下步骤：
 
