@@ -8,11 +8,6 @@
 Toolala工具站：<a target="_blank" href="https://colatools.cn/" title="Toolala官方">点击访问</a>
 
 
-## 微信公众号（将文本复制到微信打开链接）：
-```javascript
-https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzE5MTg2ODgwOA==
-```
-
 ## 复制公众号名称，在微信搜索公众号即可找到：
 ```javascript
 Toolala小助手
