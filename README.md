@@ -2,7 +2,7 @@
 
 ![Toolala工具站Logo](assets/vico/main.ico)
 
-一个开源免费的工具导航集，提供电脑工具、手机工具和网页工具等多种类型的实用工具。
+一个开源免费的工具导航集，提供电脑工具、手机工具和网页工具等多种类型的网站。
 
 Toolala工具站：<a target="_blank" href="https://colatools.cn/" title="Toolala官方">点击访问</a>
 
